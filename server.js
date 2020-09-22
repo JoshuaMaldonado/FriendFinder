@@ -1,17 +1,25 @@
 
-var express = require("express");
+//request dependencies 
+let express = require('express');
+let path = require('path');
+let bodyParser = require('body-parser');
 
-var app = express();
+//creating app port 
+let app = express();
+let PORT = 8080
 
-var PORT = process.env.PORT || 8080;
+//using app to show public file on html 
+app.use(express.static(path.join(__dirname, './app/public')));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.text());
 
+//adding the routes to html and api pages 
+require(path.join(__dirname, './app/routing/apiRoutes'));
+require(path.join(__dirname, './app/routing/htmlRoutes'));
 
-require("./app/routing/apiRoutes")(app);
-require("./app/routing/htmlRoutes")(app);
-
-app.listen(PORT, function() {
-  console.log("App listening on PORT: " + PORT);
+//listening on port
+app.listen(PORT, function () {
+    console.log('Friend Finder app listening on PORT: ' + PORT);
 });
